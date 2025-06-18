@@ -32,12 +32,7 @@ declare namespace Arguments {
   "text": string
 }
   /** Arguments passed to the `create` command */
-  export type Create = {
-  /** Title */
-  "title": string,
-  /** Description */
-  "description": string
-}
+  export type Create = {}
   /** Arguments passed to the `recent-issues` command */
   export type RecentIssues = {}
   /** Arguments passed to the `add-workspace` command */

@@ -29,24 +29,10 @@
     },
     {
       "name": "create",
-      "title": "Create",
-      "subtitle": "Quick create issue",
-      "description": "Create an issue: workspace, title, optional description",
-      "mode": "no-view",
-      "arguments": [
-        {
-          "name": "title",
-          "type": "text",
-          "placeholder": "Title",
-          "required": true
-        },
-        {
-          "name": "description",
-          "type": "text",
-          "placeholder": "Description",
-          "required": false
-        }
-      ]
+      "title": "Create Issue",
+      "subtitle": "Quick create with dropdowns",
+      "description": "Create an issue with workspace and project selection",
+      "mode": "view"
     },
     {
       "name": "recent-issues", 
