@@ -1,12 +1,14 @@
 import { List, ActionPanel, Action, showToast, Toast, Icon, Color } from "@raycast/api";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useMultiWorkspace, WorkspaceIssue } from "./hooks/useMultiWorkspace";
+import AddWorkspace from "./add-workspace";
+import ManageWorkspaces from "./manage-workspaces";
+import CreateIssue from "./create-issue";
 
-export default function SearchIssues() {
-  const { workspaces, isLoading: workspacesLoading, searchAllWorkspaces, getRecentIssues } = useMultiWorkspace();
+export default function RecentIssues() {
+  const { workspaces, isLoading: workspacesLoading, getRecentIssues, reloadWorkspaces } = useMultiWorkspace();
   const [isLoading, setIsLoading] = useState(true);
-  const [searchResults, setSearchResults] = useState<WorkspaceIssue[]>([]);
-  const [searchText, setSearchText] = useState("");
+  const [issues, setIssues] = useState<WorkspaceIssue[]>([]);
 
   useEffect(() => {
     if (!workspacesLoading && workspaces.length > 0) {
@@ -19,8 +21,8 @@ export default function SearchIssues() {
   async function loadRecentIssues() {
     try {
       setIsLoading(true);
-      const recent = await getRecentIssues();
-      setSearchResults(recent);
+      const recent = await getRecentIssues(30); // Limit to 30 recent issues
+      setIssues(recent);
     } catch (error) {
       console.error("Error loading recent issues:", error);
       showToast({
@@ -33,29 +35,8 @@ export default function SearchIssues() {
     }
   }
 
-  async function performSearch(query: string) {
-    if (!query.trim() || workspaces.length === 0) return;
-
-    try {
-      setIsLoading(true);
-      const results = await searchAllWorkspaces(query);
-      setSearchResults(results);
-    } catch (error) {
-      console.error("Search error:", error);
-      showToast({
-        style: Toast.Style.Failure,
-        title: "Search failed",
-        message: error instanceof Error ? error.message : "Unknown error",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  // Generate a color for workspace badge
   function getWorkspaceColor(workspace: { color?: string; name: string }): Color {
     if (workspace.color) {
-      // Map Linear colors to Raycast colors
       const colorMap: Record<string, Color> = {
         blue: Color.Blue,
         purple: Color.Purple,
@@ -67,7 +48,6 @@ export default function SearchIssues() {
       return colorMap[workspace.color] || Color.SecondaryText;
     }
     
-    // Generate color based on workspace name
     const colors = [Color.Blue, Color.Purple, Color.Green, Color.Orange, Color.Yellow, Color.Magenta];
     const index = workspace.name.charCodeAt(0) % colors.length;
     return colors[index];
@@ -85,7 +65,7 @@ export default function SearchIssues() {
               <Action.Push
                 title="Add Workspace"
                 icon={Icon.Plus}
-                target={<AddWorkspace onAdded={loadRecentIssues} />}
+                target={<AddWorkspace onAdded={reloadWorkspaces} />}
               />
             </ActionPanel>
           }
@@ -97,27 +77,10 @@ export default function SearchIssues() {
   return (
     <List
       isLoading={isLoading || workspacesLoading}
-      searchBarPlaceholder="Search issues across all workspaces..."
-      searchText={searchText}
-      onSearchTextChange={(text) => {
-        setSearchText(text);
-        if (text.length > 2) {
-          // Use a debounced search
-          const timer = setTimeout(() => performSearch(text), 500);
-          return () => clearTimeout(timer);
-        } else if (text.length === 0) {
-          loadRecentIssues();
-        }
-      }}
+      navigationTitle="Recent Issues"
     >
-      {searchResults.length === 0 ? (
-        <List.EmptyView
-          icon={Icon.MagnifyingGlass}
-          title="No issues found"
-          description={searchText ? "Try a different search query" : "Your recent issues will appear here"}
-        />
-      ) : (
-        searchResults.map(({ issue, workspace }) => {
+      <List.Section title="Recent Issues" subtitle={`${issues.length} issues`}>
+        {issues.map(({ issue, workspace }) => {
           const workspaceTag = workspace.alias || workspace.name;
           
           return (
@@ -134,6 +97,7 @@ export default function SearchIssues() {
                 },
                 issue.state ? { text: issue.state.name } : {},
                 issue.priority ? { text: `P${issue.priority}` } : {},
+                { date: new Date(issue.updatedAt), tooltip: "Last updated" }
               ]}
               actions={
                 <ActionPanel>
@@ -153,7 +117,13 @@ export default function SearchIssues() {
                       title="Create Issue"
                       icon={Icon.Plus}
                       shortcut={{ modifiers: ["cmd"], key: "n" }}
-                      target={<CreateIssue defaultWorkspace={workspace} />}
+                      target={<CreateIssue />}
+                    />
+                    <Action
+                      title="Refresh"
+                      icon={Icon.RotateClockwise}
+                      shortcut={{ modifiers: ["cmd"], key: "r" }}
+                      onAction={loadRecentIssues}
                     />
                   </ActionPanel.Section>
                   <ActionPanel.Section>
@@ -161,23 +131,15 @@ export default function SearchIssues() {
                       title="Manage Workspaces"
                       icon={Icon.Gear}
                       shortcut={{ modifiers: ["cmd"], key: "," }}
-                      target={<ManageWorkspaces onUpdate={loadRecentIssues} />}
+                      target={<ManageWorkspaces />}
                     />
                   </ActionPanel.Section>
                 </ActionPanel>
               }
             />
           );
-        })
-      )}
+        })}
+      </List.Section>
     </List>
   );
-}
-
-import AddWorkspace from "./add-workspace";
-import ManageWorkspaces from "./manage-workspaces";
-
-// Placeholder component - we'll implement this next
-function CreateIssue({ defaultWorkspace }: { defaultWorkspace: any }) {
-  return <List><List.Item title="Create Issue - Coming Soon" /></List>;
 }

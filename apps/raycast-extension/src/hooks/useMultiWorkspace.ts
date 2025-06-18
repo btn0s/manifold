@@ -43,47 +43,76 @@ export function useMultiWorkspace() {
   async function searchAllWorkspaces(query: string): Promise<WorkspaceIssue[]> {
     if (!query.trim() || workspaces.length === 0) return [];
 
-    const searchPromises = workspaces.map(async (workspace) => {
-      const client = clients.get(workspace.id);
-      if (!client) return [];
+    // Process workspaces in batches to avoid rate limits
+    const batchSize = 2; // Search 2 workspaces at a time
+    const results: WorkspaceIssue[] = [];
+    
+    for (let i = 0; i < workspaces.length; i += batchSize) {
+      const batch = workspaces.slice(i, i + batchSize);
+      
+      const batchPromises = batch.map(async (workspace) => {
+        const client = clients.get(workspace.id);
+        if (!client) return [];
 
-      try {
-        const results = await client.searchIssues(query);
-        return results.nodes.map(issue => ({ issue, workspace }));
-      } catch (error) {
-        console.error(`Search failed for workspace ${workspace.name}:`, error);
-        return [];
+        try {
+          const searchResults = await client.searchIssues(query, { first: 20 }); // Limit results per workspace
+          return searchResults.nodes.map(issue => ({ issue, workspace }));
+        } catch (error) {
+          console.error(`Search failed for workspace ${workspace.name}:`, error);
+          // Check if it's a rate limit error
+          if (error instanceof Error && error.message.includes('rate limit')) {
+            showToast({
+              style: Toast.Style.Failure,
+              title: "Rate limit reached",
+              message: `Slowing down searches for ${workspace.name}`,
+            });
+          }
+          return [];
+        }
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      results.push(...batchResults.flat());
+      
+      // Add a small delay between batches to avoid rate limits
+      if (i + batchSize < workspaces.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
-    });
+    }
 
-    const results = await Promise.all(searchPromises);
-    return results.flat();
+    return results;
   }
 
   async function getRecentIssues(limit = 50): Promise<WorkspaceIssue[]> {
     if (workspaces.length === 0) return [];
 
-    const issuePromises = workspaces.map(async (workspace) => {
+    // Limit issues per workspace to avoid hitting rate limits
+    const issuesPerWorkspace = Math.min(10, Math.ceil(limit / workspaces.length));
+    const results: WorkspaceIssue[] = [];
+
+    // Process workspaces sequentially to avoid rate limits
+    for (const workspace of workspaces) {
       const client = clients.get(workspace.id);
-      if (!client) return [];
+      if (!client) continue;
 
       try {
         const issues = await client.issues({
-          first: Math.ceil(limit / workspaces.length),
+          first: issuesPerWorkspace,
           orderBy: "updatedAt",
         });
-        return issues.nodes.map(issue => ({ issue, workspace }));
+        results.push(...issues.nodes.map(issue => ({ issue, workspace })));
+        
+        // Small delay between workspace queries
+        if (workspaces.indexOf(workspace) < workspaces.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
       } catch (error) {
         console.error(`Failed to load issues for workspace ${workspace.name}:`, error);
-        return [];
       }
-    });
-
-    const results = await Promise.all(issuePromises);
-    const allIssues = results.flat();
+    }
     
     // Sort by updated date across all workspaces
-    return allIssues
+    return results
       .sort((a, b) => new Date(b.issue.updatedAt).getTime() - new Date(a.issue.updatedAt).getTime())
       .slice(0, limit);
   }

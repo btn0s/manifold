@@ -14,9 +14,16 @@
   "commands": [
     {
       "name": "index",
-      "title": "Search Linear Issues",
-      "subtitle": "Across all workspaces",
-      "description": "Search and manage issues across all your Linear workspaces",
+      "title": "Create Linear Issue",
+      "subtitle": "Quick create in any workspace",
+      "description": "Create a new issue in any of your Linear workspaces",
+      "mode": "view"
+    },
+    {
+      "name": "recent-issues", 
+      "title": "Recent Linear Issues",
+      "subtitle": "View recent issues",
+      "description": "View recent issues from all your Linear workspaces",
       "mode": "view"
     },
     {

@@ -1,1 +1,1 @@
-export { default } from "./search-issues";
+export { default } from "./create-issue";
