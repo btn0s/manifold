@@ -10,7 +10,13 @@ interface Project {
   key: string;
 }
 
-type Step = "workspace" | "project" | "details" | "priority";
+type Step = "workspace" | "project" | "title" | "description" | "priority" | "success";
+
+interface CreatedIssue {
+  url: string;
+  identifier: string;
+  title: string;
+}
 
 export default function CreateIssue() {
   // Multi-step state
@@ -20,6 +26,7 @@ export default function CreateIssue() {
   const [issueTitle, setIssueTitle] = useState("");
   const [issueDescription, setIssueDescription] = useState("");
   const [issuePriority, setIssuePriority] = useState<string>("0");
+  const [createdIssue, setCreatedIssue] = useState<CreatedIssue | null>(null);
 
   // Data state
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -77,12 +84,24 @@ export default function CreateIssue() {
 
   async function handleProjectSelect(project: Project | null) {
     setSelectedProject(project);
-    setCurrentStep("details");
+    setCurrentStep("title");
   }
 
-  async function handleDetailsSubmit(values: { title: string; description: string }) {
+  async function handleTitleSubmit(values: { title: string }) {
+    if (!values.title.trim()) {
+      showToast({
+        style: Toast.Style.Failure,
+        title: "Title required",
+        message: "Please enter an issue title",
+      });
+      return;
+    }
     setIssueTitle(values.title);
-    setIssueDescription(values.description);
+    setCurrentStep("description");
+  }
+
+  async function handleDescriptionSubmit(description: string) {
+    setIssueDescription(description);
     setCurrentStep("priority");
   }
 
@@ -264,35 +283,56 @@ export default function CreateIssue() {
     );
   }
 
-  // Step 3: Add Title and Description (Optional)
-  if (currentStep === "details") {
+  // Step 3: Add Title (Required)
+  if (currentStep === "title") {
     return (
       <Form
-        navigationTitle="Issue Details (Optional)"
+        navigationTitle="Issue Title"
         actions={
           <ActionPanel>
             <Action.SubmitForm
               title="Continue"
               icon={Icon.ArrowRight}
-              onSubmit={handleDetailsSubmit}
-            />
-            <Action
-              title="Skip Details"
-              icon={Icon.ArrowRight}
-              shortcut={{ modifiers: ["cmd"], key: "return" }}
-              onAction={() => handleDetailsSubmit({ title: "", description: "" })}
+              onSubmit={handleTitleSubmit}
             />
           </ActionPanel>
         }
       >
-        <Form.Description text="Add issue details or press Cmd+Enter to skip" />
+        <Form.Description text="Enter a title for your issue" />
         <Form.TextField
           id="title"
           title="Title"
           placeholder="Fix the login bug"
           value={issueTitle}
           onChange={setIssueTitle}
+          autoFocus
         />
+      </Form>
+    );
+  }
+
+  // Step 4: Add Description (Optional)
+  if (currentStep === "description") {
+    return (
+      <Form
+        navigationTitle="Issue Description (Optional)"
+        actions={
+          <ActionPanel>
+            <Action.SubmitForm
+              title="Continue"
+              icon={Icon.ArrowRight}
+              onSubmit={(values) => handleDescriptionSubmit(values.description)}
+            />
+            <Action
+              title="Skip Description"
+              icon={Icon.ArrowRight}
+              shortcut={{ modifiers: ["cmd"], key: "return" }}
+              onAction={() => handleDescriptionSubmit("")}
+            />
+          </ActionPanel>
+        }
+      >
+        <Form.Description text="Add details or press Enter to skip" />
         <Form.TextArea
           id="description"
           title="Description"
@@ -300,12 +340,13 @@ export default function CreateIssue() {
           value={issueDescription}
           onChange={setIssueDescription}
           enableMarkdown
+          autoFocus
         />
       </Form>
     );
   }
 
-  // Step 4: Choose Priority
+  // Step 5: Choose Priority
   if (currentStep === "priority") {
     const priorities = [
       { value: "0", title: "No Priority", icon: "⚪" },
