@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useMultiWorkspace, WorkspaceIssue } from "./hooks/useMultiWorkspace";
 import AddWorkspace from "./add-workspace";
 import ManageWorkspaces from "./manage-workspaces";
-import CreateIssue from "./create-issue";
+import CreateIssue from "./create";
 
 export default function RecentIssues() {
   const { workspaces, isLoading: workspacesLoading, getRecentIssues, reloadWorkspaces } = useMultiWorkspace();

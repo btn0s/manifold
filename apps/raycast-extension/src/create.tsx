@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, Toast, popToRoot, Icon, useNavigation } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, Toast, popToRoot, Icon, useNavigation, LaunchProps } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { LinearClient } from "@linear/sdk";
 import { Workspace, WorkspaceStorage } from "./workspace-storage";
@@ -16,7 +16,11 @@ interface Project {
   key: string;
 }
 
-export default function QuickCreateIssue() {
+interface CreateArguments {
+  query?: string;
+}
+
+export default function QuickCreateIssue(props: LaunchProps<{ arguments: CreateArguments }>) {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>("");
   const [teams, setTeams] = useState<Team[]>([]);
@@ -25,11 +29,21 @@ export default function QuickCreateIssue() {
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [initialTitle, setInitialTitle] = useState<string>("");
   const { push } = useNavigation();
+  
+  const query = props.arguments?.query || "";
 
   useEffect(() => {
     loadWorkspaces();
   }, []);
+
+  useEffect(() => {
+    // Parse query when workspaces are loaded
+    if (workspaces.length > 0 && query) {
+      parseQuery(query);
+    }
+  }, [workspaces, query]);
 
   useEffect(() => {
     if (selectedWorkspaceId) {
@@ -43,13 +57,41 @@ export default function QuickCreateIssue() {
     }
   }, [selectedTeamId, selectedWorkspaceId]);
 
+  function parseQuery(queryString: string) {
+    const parts = queryString.split(' ');
+    if (parts.length === 0) return;
+
+    // Try to match workspace
+    const firstPart = parts[0].toLowerCase();
+    const matchedWorkspace = workspaces.find(w => 
+      w.name.toLowerCase() === firstPart || 
+      w.alias?.toLowerCase() === firstPart ||
+      w.name.toLowerCase().startsWith(firstPart)
+    );
+
+    if (matchedWorkspace) {
+      setSelectedWorkspaceId(matchedWorkspace.id);
+      
+      // Check if second part might be a project
+      if (parts.length > 1) {
+        const secondPart = parts[1].toLowerCase();
+        // We'll try to match project after teams load
+        // For now, assume rest is title
+        setInitialTitle(parts.slice(1).join(' '));
+      }
+    } else {
+      // No workspace match, use the whole query as title
+      setInitialTitle(queryString);
+    }
+  }
+
   async function loadWorkspaces() {
     try {
       const stored = await WorkspaceStorage.getWorkspaces();
       setWorkspaces(stored);
       
-      // Select first workspace by default
-      if (stored.length > 0) {
+      // Select first workspace by default only if no query
+      if (stored.length > 0 && !query) {
         setSelectedWorkspaceId(stored[0].id);
       }
     } catch (error) {
@@ -264,6 +306,7 @@ export default function QuickCreateIssue() {
         id="title"
         title="Title"
         placeholder="Fix the login bug"
+        defaultValue={initialTitle}
         autoFocus
       />
 

@@ -14,25 +14,18 @@
   "commands": [
     {
       "name": "index",
-      "title": "Create Linear Issue",
-      "subtitle": "Quick create in any workspace",
-      "description": "Create a new issue in any of your Linear workspaces",
+      "title": "Create Issue",
+      "subtitle": "Quick create with smart suggestions",
+      "description": "Create an issue with workspace and project selection",
       "mode": "view",
       "arguments": [
         {
-          "name": "text",
+          "name": "query",
           "type": "text",
-          "placeholder": "thinkhuman Fix the bug",
+          "placeholder": "workspace project title",
           "required": false
         }
       ]
-    },
-    {
-      "name": "create",
-      "title": "Create Issue",
-      "subtitle": "Quick create with dropdowns",
-      "description": "Create an issue with workspace and project selection",
-      "mode": "view"
     },
     {
       "name": "recent-issues", 
