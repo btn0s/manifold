@@ -7,62 +7,29 @@
   "private": true,
   "author": "btn0s",
   "description": "Manage multiple Linear workspaces from Raycast",
-  "icon": "extension-icon.png",
+  "icon": "manifold.png",
   "categories": ["Productivity", "Developer Tools"],
   "keywords": ["linear", "workspace", "freelance", "project management"],
   "license": "MIT",
   "commands": [
     {
       "name": "index",
-      "title": "Create Issue",
-      "subtitle": "Quick create",
-      "description": "Create an issue with workspace, project, title and description",
-      "mode": "no-view",
-      "arguments": [
-        {
-          "name": "workspace",
-          "type": "text",
-          "placeholder": "Workspace",
-          "required": true
-        },
-        {
-          "name": "project",
-          "type": "text",
-          "placeholder": "Project (optional)",
-          "required": false
-        },
-        {
-          "name": "title",
-          "type": "text",
-          "placeholder": "Title",
-          "required": true
-        },
-        {
-          "name": "description",
-          "type": "text",
-          "placeholder": "Description (optional)",
-          "required": false
-        }
-      ]
+      "title": "Create Linear Issue",
+      "subtitle": "Manifold",
+      "description": "Create a Linear issue with a multi-step wizard",
+      "mode": "view"
     },
     {
-      "name": "recent-issues", 
+      "name": "recent-issues",
       "title": "Recent Linear Issues",
-      "subtitle": "View recent issues",
+      "subtitle": "Manifold",
       "description": "View recent issues from all your Linear workspaces",
       "mode": "view"
     },
     {
-      "name": "add-workspace",
-      "title": "Add Linear Workspace",
-      "subtitle": "Connect a new workspace",
-      "description": "Add a Linear workspace to manage it in Manifold",
-      "mode": "view"
-    },
-    {
       "name": "manage-workspaces",
-      "title": "Manage Workspaces",
-      "subtitle": "View and edit workspaces",
+      "title": "Manage Linear Workspaces",
+      "subtitle": "Manifold",
       "description": "Manage your connected Linear workspaces",
       "mode": "view"
     }

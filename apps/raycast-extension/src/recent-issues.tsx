@@ -1,7 +1,6 @@
 import { List, ActionPanel, Action, showToast, Toast, Icon, Color } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { useMultiWorkspace, WorkspaceIssue } from "./hooks/useMultiWorkspace";
-import AddWorkspace from "./add-workspace";
 import ManageWorkspaces from "./manage-workspaces";
 
 export default function RecentIssues() {
@@ -62,9 +61,9 @@ export default function RecentIssues() {
           actions={
             <ActionPanel>
               <Action.Push
-                title="Add Workspace"
-                icon={Icon.Plus}
-                target={<AddWorkspace onAdded={reloadWorkspaces} />}
+                title="Manage Workspaces"
+                icon={Icon.Gear}
+                target={<ManageWorkspaces />}
               />
             </ActionPanel>
           }
@@ -123,7 +122,7 @@ export default function RecentIssues() {
                     <Action.Push
                       title="Manage Workspaces"
                       icon={Icon.Gear}
-                      shortcut={{ modifiers: ["cmd"], key: "," }}
+                      shortcut={{ modifiers: ["cmd", "shift"], key: "m" }}
                       target={<ManageWorkspaces />}
                     />
                   </ActionPanel.Section>

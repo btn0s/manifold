@@ -17,28 +17,15 @@ declare namespace Preferences {
   export type Index = ExtensionPreferences & {}
   /** Preferences accessible in the `recent-issues` command */
   export type RecentIssues = ExtensionPreferences & {}
-  /** Preferences accessible in the `add-workspace` command */
-  export type AddWorkspace = ExtensionPreferences & {}
   /** Preferences accessible in the `manage-workspaces` command */
   export type ManageWorkspaces = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
   /** Arguments passed to the `index` command */
-  export type Index = {
-  /** Workspace */
-  "workspace": string,
-  /** Project (optional) */
-  "project": string,
-  /** Title */
-  "title": string,
-  /** Description (optional) */
-  "description": string
-}
+  export type Index = {}
   /** Arguments passed to the `recent-issues` command */
   export type RecentIssues = {}
-  /** Arguments passed to the `add-workspace` command */
-  export type AddWorkspace = {}
   /** Arguments passed to the `manage-workspaces` command */
   export type ManageWorkspaces = {}
 }
