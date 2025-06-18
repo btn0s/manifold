@@ -36,6 +36,7 @@
   ],
   "scripts": {
     "build": "ray build --skip-types -e dist -o dist",
+    "publish": "npx @raycast/api@latest publish",
     "dev": "ray develop",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit"

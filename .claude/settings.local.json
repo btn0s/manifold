@@ -20,7 +20,10 @@
       "Bash(npm run dev:*)",
       "WebFetch(domain:developers.raycast.com)",
       "Bash(ls:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(pnpm build:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
