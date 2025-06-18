@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__linear__list_my_issues",
+      "mcp__linear__get_project",
+      "mcp__linear__list_projects",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(pnpm install:*)"
+    ],
+    "deny": []
+  }
+}

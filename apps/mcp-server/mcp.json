@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "manifold-linear": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "LINEAR_WORKSPACES": "${LINEAR_WORKSPACES}"
+      }
+    }
+  }
+}

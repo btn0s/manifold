@@ -1,0 +1,41 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "manifold-linear",
+  "title": "Manifold for Linear",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "author": "btn0s",
+  "description": "Manage multiple Linear workspaces from Raycast",
+  "icon": "extension-icon.png",
+  "categories": ["Productivity", "Developer Tools"],
+  "keywords": ["linear", "workspace", "freelance", "project management"],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Search Linear Issues",
+      "subtitle": "Across all workspaces",
+      "description": "Search and manage issues across all your Linear workspaces",
+      "mode": "view"
+    }
+  ],
+  "scripts": {
+    "build": "ray build --skip-types -e dist -o dist",
+    "dev": "ray develop",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@raycast/api": "^1.84.5",
+    "@raycast/utils": "^2.0.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^2.0.4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}
