@@ -26,8 +26,14 @@ declare namespace Preferences {
 declare namespace Arguments {
   /** Arguments passed to the `index` command */
   export type Index = {
-  /** workspace project title */
-  "query": string
+  /** Workspace */
+  "workspace": string,
+  /** Project (optional) */
+  "project": string,
+  /** Title */
+  "title": string,
+  /** Description (optional) */
+  "description": string
 }
   /** Arguments passed to the `recent-issues` command */
   export type RecentIssues = {}

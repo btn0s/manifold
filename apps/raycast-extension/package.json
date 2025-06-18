@@ -15,14 +15,32 @@
     {
       "name": "index",
       "title": "Create Issue",
-      "subtitle": "Quick create with smart suggestions",
-      "description": "Create an issue with workspace and project selection",
-      "mode": "view",
+      "subtitle": "Quick create",
+      "description": "Create an issue with workspace, project, title and description",
+      "mode": "no-view",
       "arguments": [
         {
-          "name": "query",
+          "name": "workspace",
           "type": "text",
-          "placeholder": "workspace project title",
+          "placeholder": "Workspace",
+          "required": true
+        },
+        {
+          "name": "project",
+          "type": "text",
+          "placeholder": "Project (optional)",
+          "required": false
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "placeholder": "Title",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "placeholder": "Description (optional)",
           "required": false
         }
       ]

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useMultiWorkspace, WorkspaceIssue } from "./hooks/useMultiWorkspace";
 import AddWorkspace from "./add-workspace";
 import ManageWorkspaces from "./manage-workspaces";
-import CreateIssue from "./create";
 
 export default function RecentIssues() {
   const { workspaces, isLoading: workspacesLoading, getRecentIssues, reloadWorkspaces } = useMultiWorkspace();
@@ -113,12 +112,6 @@ export default function RecentIssues() {
                     />
                   </ActionPanel.Section>
                   <ActionPanel.Section>
-                    <Action.Push
-                      title="Create Issue"
-                      icon={Icon.Plus}
-                      shortcut={{ modifiers: ["cmd"], key: "n" }}
-                      target={<CreateIssue />}
-                    />
                     <Action
                       title="Refresh"
                       icon={Icon.RotateClockwise}
