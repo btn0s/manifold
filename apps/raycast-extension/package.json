@@ -17,7 +17,30 @@
       "title": "Create Linear Issue",
       "subtitle": "Quick create in any workspace",
       "description": "Create a new issue in any of your Linear workspaces",
-      "mode": "view"
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "text",
+          "type": "text",
+          "placeholder": "thinkhuman Fix the bug",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "create",
+      "title": "Create",
+      "subtitle": "workspace issue title",
+      "description": "Quick create: 'create thinkhuman Fix the bug'",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "text",
+          "type": "text",
+          "placeholder": "thinkhuman Fix the bug",
+          "required": true
+        }
+      ]
     },
     {
       "name": "recent-issues", 

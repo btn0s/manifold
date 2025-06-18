@@ -15,6 +15,8 @@ declare type Preferences = ExtensionPreferences
 declare namespace Preferences {
   /** Preferences accessible in the `index` command */
   export type Index = ExtensionPreferences & {}
+  /** Preferences accessible in the `create` command */
+  export type Create = ExtensionPreferences & {}
   /** Preferences accessible in the `recent-issues` command */
   export type RecentIssues = ExtensionPreferences & {}
   /** Preferences accessible in the `add-workspace` command */
@@ -25,7 +27,15 @@ declare namespace Preferences {
 
 declare namespace Arguments {
   /** Arguments passed to the `index` command */
-  export type Index = {}
+  export type Index = {
+  /** thinkhuman Fix the bug */
+  "text": string
+}
+  /** Arguments passed to the `create` command */
+  export type Create = {
+  /** thinkhuman Fix the bug */
+  "text": string
+}
   /** Arguments passed to the `recent-issues` command */
   export type RecentIssues = {}
   /** Arguments passed to the `add-workspace` command */

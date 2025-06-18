@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, Toast, popToRoot, Icon, useNavigation } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, Toast, popToRoot, Icon, useNavigation, LaunchProps } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { LinearClient } from "@linear/sdk";
 import { Workspace, WorkspaceStorage } from "./workspace-storage";
@@ -9,7 +9,11 @@ interface Team {
   name: string;
 }
 
-export default function CreateIssue() {
+interface CreateIssueArguments {
+  text?: string;
+}
+
+export default function CreateIssue(props: LaunchProps<{ arguments: CreateIssueArguments }>) {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>("");
   const [teams, setTeams] = useState<Team[]>([]);
@@ -17,10 +21,20 @@ export default function CreateIssue() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { push } = useNavigation();
+  
+  // Parse initial arguments
+  const initialText = props.arguments?.text || "";
 
   useEffect(() => {
     loadWorkspaces();
   }, []);
+
+  useEffect(() => {
+    // Parse initial arguments when workspaces are loaded
+    if (workspaces.length > 0 && initialText) {
+      parseInitialText(initialText);
+    }
+  }, [workspaces, initialText]);
 
   useEffect(() => {
     // Parse @workspace syntax from title
@@ -41,13 +55,40 @@ export default function CreateIssue() {
     }
   }, [selectedWorkspaceId]);
 
+  function parseInitialText(text: string) {
+    // Try to match workspace name or alias at the beginning
+    const words = text.split(' ');
+    if (words.length < 2) {
+      setTitle(text);
+      return;
+    }
+
+    const firstWord = words[0].toLowerCase();
+    const restOfText = words.slice(1).join(' ');
+
+    // Check if first word matches any workspace name or alias
+    const matchedWorkspace = workspaces.find(w => 
+      w.name.toLowerCase() === firstWord || 
+      w.alias?.toLowerCase() === firstWord ||
+      w.name.toLowerCase().startsWith(firstWord)
+    );
+
+    if (matchedWorkspace) {
+      setSelectedWorkspaceId(matchedWorkspace.id);
+      setTitle(restOfText);
+    } else {
+      // No workspace match, use the whole text as title
+      setTitle(text);
+    }
+  }
+
   async function loadWorkspaces() {
     try {
       const stored = await WorkspaceStorage.getWorkspaces();
       setWorkspaces(stored);
       
-      // Select first workspace by default
-      if (stored.length > 0) {
+      // Select first workspace by default only if no initial text
+      if (stored.length > 0 && !initialText) {
         setSelectedWorkspaceId(stored[0].id);
       }
     } catch (error) {
