@@ -3,7 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "lib": ["ES2023"],
-    "module": "CommonJS",
+    "module": "NodeNext",
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,

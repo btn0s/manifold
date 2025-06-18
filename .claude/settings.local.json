@@ -10,7 +10,11 @@
       "Bash(git commit:*)",
       "mcp__linear__list_teams",
       "mcp__linear__list_issue_statuses",
-      "mcp__linear__create_issue"
+      "mcp__linear__create_issue",
+      "Bash(curl:*)",
+      "Bash(mv:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

@@ -18,6 +18,20 @@
       "subtitle": "Across all workspaces",
       "description": "Search and manage issues across all your Linear workspaces",
       "mode": "view"
+    },
+    {
+      "name": "add-workspace",
+      "title": "Add Linear Workspace",
+      "subtitle": "Connect a new workspace",
+      "description": "Add a Linear workspace to manage it in Manifold",
+      "mode": "view"
+    },
+    {
+      "name": "manage-workspaces",
+      "title": "Manage Workspaces",
+      "subtitle": "View and edit workspaces",
+      "description": "Manage your connected Linear workspaces",
+      "mode": "view"
     }
   ],
   "scripts": {
@@ -28,7 +42,9 @@
   },
   "dependencies": {
     "@raycast/api": "^1.84.5",
-    "@raycast/utils": "^2.0.0"
+    "@raycast/utils": "^2.0.0",
+    "@linear/sdk": "^33.0.0",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^2.0.4",

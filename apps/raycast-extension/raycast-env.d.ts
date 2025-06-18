@@ -15,10 +15,18 @@ declare type Preferences = ExtensionPreferences
 declare namespace Preferences {
   /** Preferences accessible in the `index` command */
   export type Index = ExtensionPreferences & {}
+  /** Preferences accessible in the `add-workspace` command */
+  export type AddWorkspace = ExtensionPreferences & {}
+  /** Preferences accessible in the `manage-workspaces` command */
+  export type ManageWorkspaces = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
   /** Arguments passed to the `index` command */
   export type Index = {}
+  /** Arguments passed to the `add-workspace` command */
+  export type AddWorkspace = {}
+  /** Arguments passed to the `manage-workspaces` command */
+  export type ManageWorkspaces = {}
 }
 
