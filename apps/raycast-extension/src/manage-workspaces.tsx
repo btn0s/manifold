@@ -63,7 +63,7 @@ export default function ManageWorkspaces() {
   function getWorkspaceColor(workspace: Workspace): Color {
     const colors = [Color.Blue, Color.Purple, Color.Green, Color.Orange, Color.Yellow, Color.Magenta];
     const index = workspace.name.charCodeAt(0) % colors.length;
-    return colors[index];
+    return colors[index] || Color.Red;
   }
 
   return (
@@ -91,11 +91,11 @@ export default function ManageWorkspaces() {
               title={workspace.name}
               subtitle={workspace.email}
               accessories={[
-                workspace.alias ? { 
-                  tag: { 
-                    value: `@${workspace.alias}`, 
-                    color: getWorkspaceColor(workspace) 
-                  } 
+                workspace.alias ? {
+                  tag: {
+                    value: `@${workspace.alias}`,
+                    color: getWorkspaceColor(workspace)
+                  }
                 } : {},
               ]}
               actions={
@@ -238,7 +238,7 @@ function AddWorkspace({ onAdded }: AddWorkspaceProps) {
 
       // Fetch workspace info using the new token
       const info = await WorkspaceStorage.fetchWorkspaceInfo(tokenResponse.access_token);
-      
+
       // Check if workspace already exists
       const existing = await WorkspaceStorage.getWorkspaces();
       if (existing.some(w => w.organizationId === info.organizationId)) {
@@ -270,24 +270,24 @@ function AddWorkspace({ onAdded }: AddWorkspaceProps) {
       popToRoot();
     } catch (error) {
       console.error("Error adding workspace:", error);
-      
+
       // Show detailed error information
       let errorMessage = "Unknown error";
       if (error instanceof Error) {
         errorMessage = error.message;
-        
+
         // Check for OAuth-specific errors
         if (error.message.includes("invalid_request") || error.message.includes("redirect_uri")) {
           errorMessage = "OAuth configuration error. Check redirect URI in Linear OAuth app.";
         }
       }
-      
+
       showToast({
         style: Toast.Style.Failure,
         title: "Failed to add workspace",
         message: errorMessage,
       });
-      
+
       // Log full error details
       console.error("Full error details:", JSON.stringify(error, null, 2));
     } finally {
@@ -312,14 +312,14 @@ function AddWorkspace({ onAdded }: AddWorkspaceProps) {
         title="Add Linear Workspace"
         text="Connect a new Linear workspace to Manifold. You'll be prompted to authenticate and select which workspace to add."
       />
-      
+
       <Form.TextField
         id="alias"
         title="Workspace Alias"
         placeholder="e.g., client1, personal, work"
         info="Optional short name for quick access (e.g., @client1)"
       />
-      
+
       <Form.Description
         text="Click 'Connect New Workspace' to authenticate with Linear and select a workspace."
       />

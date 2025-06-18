@@ -45,10 +45,10 @@ export default function RecentIssues() {
       };
       return colorMap[workspace.color] || Color.SecondaryText;
     }
-    
+
     const colors = [Color.Blue, Color.Purple, Color.Green, Color.Orange, Color.Yellow, Color.Magenta];
     const index = workspace.name.charCodeAt(0) % colors.length;
-    return colors[index];
+    return colors[index] || Color.SecondaryText;
   }
 
   if (workspaces.length === 0 && !workspacesLoading) {
@@ -80,20 +80,21 @@ export default function RecentIssues() {
       <List.Section title="Recent Issues" subtitle={`${issues.length} issues`}>
         {issues.map(({ issue, workspace }) => {
           const workspaceTag = workspace.alias || workspace.name;
-          
+
           return (
             <List.Item
               key={`${workspace.id}-${issue.id}`}
               title={issue.title}
               subtitle={issue.identifier}
               accessories={[
-                { 
-                  tag: { 
-                    value: workspaceTag, 
-                    color: getWorkspaceColor(workspace) 
-                  } 
+                {
+                  tag: {
+                    value: workspaceTag,
+                    color: getWorkspaceColor(workspace)
+                  }
                 },
-                issue.state ? { text: issue.state.name } : {},
+                // State is a LinearFetch, so we can't access name directly
+                // For now, we'll skip showing the state
                 issue.priority ? { text: `P${issue.priority}` } : {},
                 { date: new Date(issue.updatedAt), tooltip: "Last updated" }
               ]}

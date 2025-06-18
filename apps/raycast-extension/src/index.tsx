@@ -64,8 +64,8 @@ export default function CreateIssue() {
       setIsLoading(true);
       const client = new LinearClient({ accessToken: workspace.accessToken });
       const projectsData = await client.projects();
-      setProjects(projectsData.nodes.map(project => ({ 
-        id: project.id, 
+      setProjects(projectsData.nodes.map(project => ({
+        id: project.id,
         name: project.name,
         key: project.name.substring(0, 3).toUpperCase()
       })));
@@ -116,23 +116,23 @@ export default function CreateIssue() {
     try {
       setIsLoading(true);
       const client = new LinearClient({ accessToken: selectedWorkspace.accessToken });
-      
+
       // Get the default team for the user
       const viewer = await client.viewer;
       const teams = await viewer.teams();
-      
+
       if (teams.nodes.length === 0) {
         throw new Error("No teams found for this user");
       }
-      
+
       // Use the first team as default
       const defaultTeam = teams.nodes[0];
-      
+
       const issueData: any = {
         title: issueTitle || "Untitled Issue",
         description: issueDescription || undefined,
         priority: issuePriority ? parseInt(issuePriority) : undefined,
-        teamId: defaultTeam.id,
+        teamId: defaultTeam?.id || "",
       };
 
       if (selectedProject) {
@@ -145,21 +145,15 @@ export default function CreateIssue() {
         const issueResult = await result.issue;
         if (issueResult) {
           await Clipboard.copy(issueResult.url);
-          
-          showToast({
-            style: Toast.Style.Success,
-            title: "Issue created",
-            message: "URL copied to clipboard",
-            primaryAction: {
-              title: "Open in Linear",
-              onAction: async () => {
-                await open(issueResult.url);
-              },
-            },
-          });
-        }
 
-        popToRoot();
+          setCreatedIssue({
+            url: issueResult.url,
+            identifier: issueResult.identifier,
+            title: issueResult.title,
+          });
+
+          setCurrentStep("success");
+        }
       }
     } catch (error) {
       console.error("Error creating issue:", error);
@@ -377,6 +371,73 @@ export default function CreateIssue() {
             }
           />
         ))}
+      </List>
+    );
+  }
+
+  // Step 6: Success
+  if (currentStep === "success" && createdIssue) {
+    return (
+      <List navigationTitle="Issue Created Successfully!">
+        <List.Section title="Issue Details">
+          <List.Item
+            title={createdIssue.title}
+            subtitle={createdIssue.identifier}
+            icon={{ source: Icon.CheckCircle, tintColor: "#10B981" }}
+            accessories={[
+              { tag: { value: "Copied to Clipboard", color: "#10B981" } }
+            ]}
+            actions={
+              <ActionPanel>
+                <Action.OpenInBrowser
+                  title="Open in Linear"
+                  url={createdIssue.url}
+                  icon={Icon.Globe}
+                />
+                <Action.CopyToClipboard
+                  title="Copy URL"
+                  content={createdIssue.url}
+                  shortcut={{ modifiers: ["cmd"], key: "c" }}
+                />
+                <Action
+                  title="Create Another Issue"
+                  icon={Icon.Plus}
+                  shortcut={{ modifiers: ["cmd"], key: "n" }}
+                  onAction={() => {
+                    // Reset state for new issue
+                    setCurrentStep("workspace");
+                    setSelectedWorkspace(null);
+                    setSelectedProject(null);
+                    setIssueTitle("");
+                    setIssueDescription("");
+                    setIssuePriority("0");
+                    setCreatedIssue(null);
+                  }}
+                />
+                <Action
+                  title="Close"
+                  icon={Icon.XMarkCircle}
+                  shortcut={{ modifiers: ["cmd"], key: "w" }}
+                  onAction={() => popToRoot()}
+                />
+              </ActionPanel>
+            }
+          />
+        </List.Section>
+        <List.Section title="What's Next?">
+          <List.Item
+            title="Press Enter to open in Linear"
+            icon={Icon.ArrowRight}
+          />
+          <List.Item
+            title="Press ⌘+N to create another issue"
+            icon={Icon.ArrowRight}
+          />
+          <List.Item
+            title="Press ⌘+W to close"
+            icon={Icon.ArrowRight}
+          />
+        </List.Section>
       </List>
     );
   }

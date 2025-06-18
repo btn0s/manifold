@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@raycast/api": "^1.84.5",
-    "@raycast/utils": "^2.0.0",
     "@linear/sdk": "^33.0.0",
     "nanoid": "^5.0.7"
   },
