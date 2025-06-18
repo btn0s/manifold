@@ -30,15 +30,21 @@
     {
       "name": "create",
       "title": "Create",
-      "subtitle": "workspace issue title",
-      "description": "Quick create: 'create thinkhuman Fix the bug'",
+      "subtitle": "Quick create issue",
+      "description": "Create an issue: workspace, title, optional description",
       "mode": "no-view",
       "arguments": [
         {
-          "name": "text",
+          "name": "title",
           "type": "text",
-          "placeholder": "thinkhuman Fix the bug",
+          "placeholder": "Title",
           "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "placeholder": "Description",
+          "required": false
         }
       ]
     },

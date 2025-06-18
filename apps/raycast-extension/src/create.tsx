@@ -3,17 +3,18 @@ import { LinearClient } from "@linear/sdk";
 import { WorkspaceStorage } from "./workspace-storage";
 
 interface CreateArguments {
-  text: string;
+  title: string;
+  description?: string;
 }
 
 export default async function QuickCreate(props: LaunchProps<{ arguments: CreateArguments }>) {
-  const text = props.arguments.text;
+  const { title, description } = props.arguments;
   
-  if (!text || text.trim().length === 0) {
+  if (!title || title.trim().length === 0) {
     await showToast({
       style: Toast.Style.Failure,
-      title: "No text provided",
-      message: "Usage: create thinkhuman Fix the bug",
+      title: "No title provided",
+      message: "Title is required",
     });
     return;
   }
@@ -36,13 +37,13 @@ export default async function QuickCreate(props: LaunchProps<{ arguments: Create
       return;
     }
 
-    // Parse the text
-    const words = text.split(' ');
+    // Parse the title to extract workspace
+    const words = title.split(' ');
     if (words.length < 2) {
       await showToast({
         style: Toast.Style.Failure,
         title: "Invalid format",
-        message: "Usage: create workspace-name issue title",
+        message: "Format: workspace-name issue title",
       });
       return;
     }
@@ -85,6 +86,7 @@ export default async function QuickCreate(props: LaunchProps<{ arguments: Create
     // Create the issue
     const result = await client.createIssue({
       title: issueTitle,
+      description: description || undefined,
       teamId: team.id,
     });
 

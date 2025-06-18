@@ -33,8 +33,10 @@ declare namespace Arguments {
 }
   /** Arguments passed to the `create` command */
   export type Create = {
-  /** thinkhuman Fix the bug */
-  "text": string
+  /** Title */
+  "title": string,
+  /** Description */
+  "description": string
 }
   /** Arguments passed to the `recent-issues` command */
   export type RecentIssues = {}
