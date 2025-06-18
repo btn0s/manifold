@@ -6,7 +6,11 @@
       "mcp__linear__list_projects",
       "Bash(mkdir:*)",
       "Bash(rm:*)",
-      "Bash(pnpm install:*)"
+      "Bash(pnpm install:*)",
+      "Bash(git commit:*)",
+      "mcp__linear__list_teams",
+      "mcp__linear__list_issue_statuses",
+      "mcp__linear__create_issue"
     ],
     "deny": []
   }
