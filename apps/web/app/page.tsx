@@ -36,20 +36,20 @@ export default function Page() {
                             </div>
 
                             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                                Create Linear issues
+                                Raycast extension for Linear
                                 <span className="block text-primary mt-2">across all your workspaces</span>
                             </h1>
 
                             <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                                Connect all your Linear workspaces. Create tasks with a simple wizard.
-                                Perfect for freelancers and agencies managing multiple clients.
+                                A Raycast extension that connects all your Linear workspaces. Create tasks 
+                                instantly from your command palette. Built for multi-client workflows.
                             </p>
 
                             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                                 <Button size="lg" className="gap-2 text-base px-8" asChild>
                                     <a href="https://www.raycast.com/btn0s/manifold-linear" target="_blank"
                                        rel="noopener noreferrer">
-                                        Install Extension
+                                        Install in Raycast
                                         <ArrowRight className="h-4 w-4"/>
                                     </a>
                                 </Button>
@@ -70,10 +70,10 @@ export default function Page() {
                 <div className="container mx-auto max-w-6xl">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                            Your workflow, accelerated
+                            Command palette meets Linear
                         </h2>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Stop context switching between Linear workspaces. Create issues in seconds, not minutes.
+                            Raycast brings the power of keyboard shortcuts to Linear. Manage multiple workspaces without ever leaving your command palette.
                         </p>
                     </div>
 
@@ -86,10 +86,10 @@ export default function Page() {
                                         <Command className="w-5 h-5 text-primary"/>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg mb-1">Command Palette First</h3>
+                                        <h3 className="font-semibold text-lg mb-1">Native Raycast Experience</h3>
                                         <p className="text-muted-foreground">
-                                            Launch with ⌘+Space and type "Create Linear Issue".
-                                            Everything happens in Raycast.
+                                            Launch with ⌘+Space. Search, navigate, and create—all
+                                            within Raycast's familiar interface.
                                         </p>
                                     </div>
                                 </div>
@@ -212,10 +212,10 @@ export default function Page() {
                             <div className="mb-4">
                                 <Command className="h-8 w-8 text-primary"/>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">Keyboard First</h3>
+                            <h3 className="font-semibold text-lg mb-2">Raycast Keyboard Shortcuts</h3>
                             <p className="text-sm text-muted-foreground">
-                                Never touch your mouse. Navigate with arrows,
-                                select with Enter, skip with shortcuts.
+                                Built for Raycast's keyboard-first philosophy. Navigate 
+                                with arrows, select with Enter, skip with shortcuts.
                             </p>
                         </div>
 
@@ -319,10 +319,10 @@ export default function Page() {
             <section className="py-20 px-4 bg-muted/30">
                 <div className="container mx-auto max-w-4xl text-center">
                     <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                        Ready to streamline your Linear workflow?
+                        Ready to supercharge Raycast with Linear?
                     </h2>
                     <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                        Join freelancers and studios who create issues 10x faster with Manifold.
+                        Join developers who manage multiple Linear workspaces directly from Raycast.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button size="lg" className="gap-2 text-base px-8" asChild>
@@ -334,7 +334,7 @@ export default function Page() {
                         </Button>
                     </div>
                     <p className="mt-6 text-sm text-muted-foreground">
-                        Free and open source • No account required • Works with your existing Linear setup
+                        Free Raycast extension • Open source • Works with your existing Linear accounts
                     </p>
                 </div>
             </section>
@@ -351,7 +351,7 @@ export default function Page() {
                                 height={24}
                                 className="rounded"
                             />
-                            <span className="font-semibold">Manifold</span>
+                            <span className="font-semibold">Manifold for Raycast</span>
                         </div>
                         <div className="flex gap-6 text-sm text-muted-foreground">
                             <a href="https://github.com/btn0s/manifold" target="_blank" rel="noopener noreferrer"
